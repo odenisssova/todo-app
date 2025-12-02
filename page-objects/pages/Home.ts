@@ -10,6 +10,7 @@ export class Home {
     readonly toDoList: Locator
     readonly newTodoInput: Locator
     readonly clearCompletedButton: Locator
+    readonly filterCompletedButton: Locator
 
     constructor(page: Page) {
         this.page = page
@@ -19,6 +20,7 @@ export class Home {
         this.toDoList = page.getByTestId("todo-list")
         this.newTodoInput = this.header.getByTestId("text-input")
         this.clearCompletedButton = this.footer.locator(".clear-completed")
+        this.filterCompletedButton = this.footer.locator('a[href="#/completed"]')
     }
 
     private get todoItems(): Locator {
@@ -41,7 +43,17 @@ export class Home {
         expect(itemsCount).toBe(expectedCount)
     }
 
+    async checkVisibleItemsCount(expectedItems: number): Promise<void> {
+        const visibleItems = await this.todoItems.filter({has: this.page.locator(':visible')}).count()
+        expect(visibleItems).toBe(expectedItems)
+    }
+
     async clickClearCompletedButton(): Promise<void> {
         await this.clearCompletedButton.click()
     }
+
+    async clickCompletedButton(): Promise<void> {
+        await this.filterCompletedButton.click()
+    }
 }
+

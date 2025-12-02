@@ -48,7 +48,17 @@ test('TL-19-5 Check clear completed button usage', async ({ page }) => {
     await home.checkCountOfItems(2)
     await home.clickClearCompletedButton()
     await home.checkCountOfItems(1)
-    //await item1.checkItemVisible(true)
-    //     await item2.checkItemVisible(false)
+});
+
+test('TL-19-6 Filtered list after pressing completed button', async ({ page }) => {
+    const home = new Home(page)
+    await home.goto()
+    const item1 = await home.createItem("TEST 1")
+    const item2 = await home.createItem("TEST 2")
+    await home.checkVisibleItemsCount(2)
+    await item2.markAsCompleted()
+    await home.checkVisibleItemsCount(2)
+    await home.clickCompletedButton()
+    await home.checkVisibleItemsCount(1)
 });
 
